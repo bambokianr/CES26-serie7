@@ -1,14 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { useSelector } from 'react-redux';
 
 import Input from './Input';
 import Button from './Button';
 
 export default function Calculator() {
+  const { display } = useSelector(state => state.operation);
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Input value="200" />
+        <Input value={display} />
       </View>
       <View style={styles.row}>
         <Button isClear>clear</Button>
