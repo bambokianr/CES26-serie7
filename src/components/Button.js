@@ -1,14 +1,34 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
+import { useDispatch } from 'react-redux';
+import { displayOperation, calculateOperation, clearDisplay } from '../store/modules/operation/actions';
+
 export default function Button({ children, isClear }) {
+  const dispatch = useDispatch();
+
   const isSpecificOperator = useCallback(val => {
     return !isNaN(val) || val === "." || val === "=";
   }, []);
 
+  const handleDisplayOperation = useCallback((val) => {
+    const correctVal = val === "X" ? "*" : val;
+    dispatch(displayOperation(correctVal));
+  }, [dispatch]);
+  
+  const handleCalculateOperation = useCallback(() => {
+    dispatch(calculateOperation());
+  }, [dispatch]);
+
+  const handleClearDisplay = useCallback(() => {
+    dispatch(clearDisplay());
+  }, [dispatch]);
+
   const handleActionToDispatch = useCallback(() => {
-    alert('!!!!!!');
-  }, []);
+    if(isClear) handleClearDisplay();
+    else if(children === "=") handleCalculateOperation();
+    else handleDisplayOperation(children);
+  }, [children, isClear, handleDisplayOperation, handleCalculateOperation, handleClearDisplay]);
 
   return (
     <TouchableOpacity 
